@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <title>FUT17 Client</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="app.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="custom.css" />
+
+  </head>
+  <body ng-app="fut17client">
+    <div class="container" ng-controller="homeController">
+
+      <form>
+        <fieldset>
+          <label for="maxBuyNow">Max Buy Now</label>
+          <input type="text" ng-model="maxBuyNow" id="maxBuyNow"/>
+          <label for="maxBid">Max Bid</label>
+          <input type="text" ng-model="maxBid" id="maxBid"/>
+        </fieldset>
+      </form>
+
+      <blockquote ng-show="errorMessage">
+        <p><em>{{errorMessage}}</em></p>
+      </blockquote>
+
+      <blockquote ng-show="successMessage">
+        <p><em>{{successMessage}}</em></p>
+      </blockquote>
+
+      <h3>{{jogador}}</h3>
+
+      <input type="checkbox" ng-model="comprar"> Comprar
+
+      <h4>Saldo: {{saldo}}</h4>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>
+              tradeId
+            </th>
+            <th>
+              Overall
+            </th>
+            <th>
+              Buy Now
+            </th>
+            <th>
+              Starting Bid
+            </th>
+            <th>
+              Current Bid
+            </th>
+            <th>
+              Expires
+            </th>
+            <th>
+              Ação
+            </th>
+          </tr>
+          <tr ng-repeat="item in httpResponse.auctionInfo">
+            <td>
+              {{item.tradeId}}
+            </td>
+            <td>
+              {{item.itemData.rating}}
+            </td>
+            <td>
+              {{item.buyNowPrice}}
+            </td>
+            <td>
+              {{item.startingBid}}
+            </td>
+            <td>
+              {{item.currentBid}}
+            </td>
+            <td>
+              {{item.expires | secondsToDateTime | date: "HH:mm:ss"}}
+            </td>
+            <td>
+              <a href="" ng-click="buy(item)">Comprar</a>
+            </td>
+          </tr>
+        </thead>
+      </table>
+
+    </div>
+  </body>
+</html>
