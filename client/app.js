@@ -54,7 +54,7 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
 
           var venda = (minimo2 - 100) * 0.95;
           $scope.saldo = venda - minimo1;
-          $scope.saldoPositivo = ($scope.saldo >= 0);
+          $scope.saldoPositivo = ($scope.saldo > 0);
 
           if ($scope.saldoPositivo && $scope.comprar) {
             $scope.buy($scope.httpResponse.auctionInfo[0]);
