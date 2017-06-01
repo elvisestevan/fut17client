@@ -2,25 +2,60 @@ var app = angular.module("fut17client", []);
 
 app.controller("homeController", ["$scope", "$http", "$interval", function ($scope, $http, $interval) {
   $scope.httpResponse = {};
-  $scope.maxBuyNow = 12000;
+  $scope.maxBuyNow = 4200;
   $scope.maxBid = 15000000;
   $scope.comprar = false;
 
+  $scope.playAudio = function() {
+    var audio = new Audio('audio/alert.mp3');
+    audio.play();
+  };
+
+  $scope.bid = function(trade) {
+    $scope.stopSearch();
+    $http({
+      method: "POST",
+      url: "/api/bid/" + trade.tradeId,
+      data: {bid: trade.currentBid + 100}
+    }).then(function (res) {
+      $scope.successMessage = "Lance feito!";
+      $scope.startSearch();
+    }).catch(function (res) {
+      $scope.errorMessage = res.data;
+      $scope.startSearch();
+    })
+  };
+
   $scope.buy = function(trade) {
+    $scope.playAudio();
+    $scope.stopSearch();
     $http({
       method: "POST",
       url: "/api/bid/" + trade.tradeId,
       data: {bid: trade.buyNowPrice}
     }).then(function (res) {
       $scope.successMessage = "Compradoooo!";
+      $scope.startSearch();
     }).catch(function (res) {
       $scope.errorMessage = res.data;
+      $scope.startSearch();
     })
+  };
+
+  $scope.getTradePile = function() {
+    $http({
+      method: "GET",
+      url: "/api/tradepile"
+    }).then(function (res) {
+      $scope.tradePile = res.data;
+    }).catch(function (res) {
+
+    });
   };
 
   $scope.getTrades = function() {
     if ($scope.aumenta) {
-      $scope.maxBid += 1000;
+      $scope.maxBid -= 1000;
     } else {
       $scope.maxBid -= 1000;
     }
@@ -43,7 +78,9 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
             method: "GET",
             url: "/api/player/" + $scope.httpResponse.auctionInfo[0].itemData.resourceId
           }).then(function (res) {
-            $scope.jogador = res.data.items[0].firstName + " " + res.data.items[0].lastName;
+            if (res.data.count > 0) {
+              $scope.jogador = res.data.items[0].firstName + " " + res.data.items[0].lastName;
+            }
 
           }).catch(function (err) {
             $scope.errorMessage = err;
@@ -56,7 +93,7 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
           $scope.saldo = venda - minimo1;
           $scope.saldoPositivo = ($scope.saldo > 0);
 
-          if ($scope.saldoPositivo && $scope.comprar) {
+          if ($scope.saldoPositivo && $scope.comprar && $scope.saldo >= 100) {
             $scope.buy($scope.httpResponse.auctionInfo[0]);
           }
         } else {
@@ -69,7 +106,16 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
     });
   };
 
-  $interval($scope.getTrades, 3000);
+  $scope.startSearch = function() {
+    $scope.getTrades();
+    $scope.getTradePile();
+    $scope.stop = $interval(function() {$scope.getTrades(); $scope.getTradePile();}, 5000);
+  }
+
+  $scope.stopSearch = function() {
+    $interval.cancel($scope.stop);
+    $scope.stop = undefined;
+  }
 
 }]);
 

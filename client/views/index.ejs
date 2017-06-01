@@ -22,11 +22,11 @@
       </form>
 
       <blockquote ng-show="errorMessage">
-        <p><em>{{errorMessage}}</em></p>
+        <p><em>Erro: {{errorMessage}}</em></p>
       </blockquote>
 
       <blockquote ng-show="successMessage">
-        <p><em>{{successMessage}}</em></p>
+        <p><em>Sucesso: {{successMessage}}</em></p>
       </blockquote>
 
       <h3>{{jogador}}</h3>
@@ -34,6 +34,10 @@
       <input type="checkbox" ng-model="comprar"> Comprar
 
       <h4>Saldo: {{saldo}}</h4>
+      <div class="pull-right">
+        <button type="button" class="btn btn-success" ng-hide="stop" ng-click="startSearch()">Start</button>
+        <button type="button" class="btn btn-danger" ng-show="stop" ng-click="stopSearch()">Stop</button>
+      </div>
 
       <table class="table">
         <thead>
@@ -80,7 +84,61 @@
               {{item.expires | secondsToDateTime | date: "HH:mm:ss"}}
             </td>
             <td>
-              <a href="" ng-click="buy(item)">Comprar</a>
+              <a href="" ng-click="buy(item)">Comprar </a> |
+              <a href="" ng-click="bid(item)"> Lance</a>
+            </td>
+          </tr>
+        </thead>
+      </table>
+
+      <h3>Tradepile</h3>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>
+              tradeId
+            </th>
+            <th>
+              Overall
+            </th>
+            <th>
+              Buy Now
+            </th>
+            <th>
+              Starting Bid
+            </th>
+            <th>
+              Current Bid
+            </th>
+            <th>
+              Expires
+            </th>
+            <th>
+              Estado de venda
+            </th>
+          </tr>
+          <tr ng-repeat="item in tradePile.auctionInfo">
+            <td>
+              {{item.tradeId}}
+            </td>
+            <td>
+              {{item.itemData.rating}}
+            </td>
+            <td>
+              {{item.buyNowPrice}}
+            </td>
+            <td>
+              {{item.startingBid}}
+            </td>
+            <td>
+              {{item.currentBid}}
+            </td>
+            <td>
+              {{item.tradeState}}
+            </td>
+            <td>
+              {{item.expires | secondsToDateTime | date: "HH:mm:ss"}}
             </td>
           </tr>
         </thead>
