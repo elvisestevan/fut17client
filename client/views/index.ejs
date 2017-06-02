@@ -14,6 +14,8 @@
 
       <form>
         <fieldset>
+          <label for="playerId">Player Id</label>
+          <input type="text" ng-model="playerId" id="playerId"/>
           <label for="maxBuyNow">Max Buy Now</label>
           <input type="text" ng-model="maxBuyNow" id="maxBuyNow"/>
           <label for="maxBid">Max Bid</label>
@@ -37,6 +39,8 @@
       <div class="pull-right">
         <button type="button" class="btn btn-success" ng-hide="stop" ng-click="startSearch()">Start</button>
         <button type="button" class="btn btn-danger" ng-show="stop" ng-click="stopSearch()">Stop</button>
+        <button type="button" class="btn btn-primary" ng-click="playAudio()">Test Sound
+          <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span></button>
       </div>
 
       <table class="table">

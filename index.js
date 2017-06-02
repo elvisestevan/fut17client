@@ -27,8 +27,8 @@ var headers = {
   "X-HTTP-Method-Override": "GET",
   "Referer": "https://www.easports.com/iframe/fut17/bundles/futweb/web/flash/FifaUltimateTeam.swf?cl=167807",
   "Accept-Language": "pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4",
-  "X-UT-PHISHING-TOKEN": "5558872385593731867",
-  "X-UT-SID": "6b3ee384-803f-407a-a88f-8b1fcb9ed007",
+  "X-UT-PHISHING-TOKEN": "6867055958065312848",
+  "X-UT-SID": "60dbb108-358d-47fd-b385-6174caf3fcb0",
   "Cookie":"__utma=103303007.930730292.1487342360.1487342360.1487342360.1; __utmz=103303007.1487342360.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _nx_mpcid=402e1909-ea16-427b-bfd1-975026b9e1ee; optimizelyEndUserId=oeu1487613430830r0.22876164328833082; utag_main=v_id:015a4c8358be001c8fae45cd082205068018b0600086e$_sn:2$_ss:0$_st:1487615597403$_pn:7%3Bexp-session$ses_id:1487613430169%3Bexp-session; optimizelySegments=%7B%222200840229%22%3A%22gc%22%2C%222207560119%22%3A%22false%22%2C%222209790291%22%3A%22none%22%2C%222215600082%22%3A%22search%22%7D; optimizelyBuckets=%7B%7D; _ga=GA1.2.930730292.1487342360"
 };
 
@@ -71,7 +71,7 @@ app.get("/api/transfermarket", function(req, res) {
   console.log("/api/transfermarket called");
   var http = require("request");
   http.post({
-    uri: "https://utas.external.s2.fut.ea.com/ut/game/fifa17/transfermarket?maxb=" + req.query.maxb + "&start=0&maskedDefId=186561&type=player&macr=" + req.query.maxcr + "&num=16",
+    uri: "https://utas.external.s2.fut.ea.com/ut/game/fifa17/transfermarket?maxb=" + req.query.maxb + "&start=0&maskedDefId=" + req.query.playerId + "&type=player&macr=" + req.query.maxcr + "&num=16",
     headers: headers
   }, function (error, response, body) {
     if (error) {

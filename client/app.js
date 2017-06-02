@@ -5,6 +5,7 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
   $scope.maxBuyNow = 4200;
   $scope.maxBid = 15000000;
   $scope.comprar = false;
+  $scope.playerId = 186561;
 
   $scope.playAudio = function() {
     var audio = new Audio('audio/alert.mp3');
@@ -63,7 +64,7 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
     $http({
       method: "GET",
       url: "/api/transfermarket",
-      params: {maxb: $scope.maxBuyNow, maxcr: $scope.maxBid}
+      params: {maxb: $scope.maxBuyNow, maxcr: $scope.maxBid, playerId: $scope.playerId}
     }).then(function (res) {
       $scope.httpResponse = res.data;
       if (res.data.code === 401) {
