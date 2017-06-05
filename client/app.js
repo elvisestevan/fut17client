@@ -40,7 +40,7 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
       url: "/api/bid/" + trade.tradeId,
       data: {bid: trade.buyNowPrice}
     }).then(function (res) {
-      $scope.successMessage = "Compradoooo!";
+      $scope.successMessage = "Compradoooo por " + trade.buyNowPrice + "!";
       $scope.startSearch();
     }).catch(function (res) {
       $scope.errorMessage = res.data;

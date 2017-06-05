@@ -11,7 +11,6 @@
   </head>
   <body ng-app="fut17client" style="font-size: 1em;">
     <div class="container" ng-controller="homeController">
-
       <form>
         <fieldset>
           <label for="playerId">Player Id</label>
@@ -113,7 +112,10 @@
               Starting Bid
             </th>
             <th>
-              Current Bid
+              Bought For
+            </th>
+            <th>
+              Profit
             </th>
             <th>
               Expires
@@ -139,13 +141,16 @@
               {{item.startingBid}}
             </td>
             <td>
-              {{item.currentBid}}
+              {{item.itemData.lastSalePrice}}
             </td>
             <td>
-              {{item.tradeState}}
+              {{item.buyNowPrice * 0.95 - item.itemData.lastSalePrice}}
             </td>
             <td>
               {{item.expires | secondsToDateTime | date: "HH:mm:ss"}}
+            </td>
+            <td>
+              {{item.tradeState}}
             </td>
             <td>
               <a ng-click="removeSoldItem(item)" href="" ng-show="item.tradeState === 'closed'">Remover</a>
