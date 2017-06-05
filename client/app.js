@@ -14,10 +14,15 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
 
   $scope.bid = function(trade) {
     $scope.stopSearch();
+    if (trade.currentBid === 0) {
+      $scope.bid = trade.startingBid;
+    } else {
+      $scope.bid = trade.currentBid + 100;
+    }
     $http({
       method: "POST",
       url: "/api/bid/" + trade.tradeId,
-      data: {bid: trade.currentBid + 100}
+      data: {bid: $scope.bid}
     }).then(function (res) {
       $scope.successMessage = "Lance feito!";
       $scope.startSearch();
@@ -49,6 +54,21 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
       url: "/api/tradepile"
     }).then(function (res) {
       $scope.tradePile = res.data;
+    }).catch(function (res) {
+
+    });
+  };
+
+  $scope.getPurchasedItems = function() {
+    $http({
+      method: "GET",
+      url: "/api/purchased/items"
+    }).then(function (res) {
+      $scope.purchasedItems = res.data;
+
+      $scope.purchasedItems.itemData.forEach(function (row) {
+        $scope.list(row);
+      });
     }).catch(function (res) {
 
     });
@@ -89,8 +109,9 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
 
           var minimo1 = $scope.httpResponse.auctionInfo[0].buyNowPrice;
           var minimo2 = $scope.httpResponse.auctionInfo[1].buyNowPrice;
+          $scope.currentPrice = minimo2 - 100;
 
-          var venda = (minimo2 - 100) * 0.95;
+          var venda = $scope.currentPrice * 0.95;
           $scope.saldo = venda - minimo1;
           $scope.saldoPositivo = ($scope.saldo > 0);
 
@@ -107,10 +128,41 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
     });
   };
 
+  $scope.removeSoldItem = function(item) {
+    $http({
+      method: "DELETE",
+      url: "/api/trade/" + item.tradeId
+    }).then(function(res) {
+
+    }).catch(function (res) {
+      console.log(res);
+    });
+  };
+
+  $scope.list = function(item) {
+    $http({
+      method: "POST",
+      url: "/api/moveToTradepile",
+      data: {itemData: [{id: item.id, pile: "trade"}]}
+    }).then(function (res) {
+      console.log(res);
+
+      return $http({
+        method: "POST",
+        url: "/api/auctionhouse",
+        data: {buyNowPrice: $scope.currentPrice, duration: 3600, itemData: {id: item.id}, startingBid: $scope.currentPrice - 100}
+      });
+    }).then(function(res) {
+      console.log(res);
+    }).catch(function (res) {
+      console.log(res);
+    });
+  };
+
   $scope.startSearch = function() {
     $scope.getTrades();
     $scope.getTradePile();
-    $scope.stop = $interval(function() {$scope.getTrades(); $scope.getTradePile();}, 5000);
+    $scope.stop = $interval(function() {$scope.getTrades(); $scope.getTradePile(); $scope.getPurchasedItems()}, 5000);
   }
 
   $scope.stopSearch = function() {

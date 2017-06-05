@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="custom.css" />
 
   </head>
-  <body ng-app="fut17client">
+  <body ng-app="fut17client" style="font-size: 1em;">
     <div class="container" ng-controller="homeController">
 
       <form>
@@ -43,7 +43,7 @@
           <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span></button>
       </div>
 
-      <table class="table">
+      <table class="table" style="font-size: 1.5em;">
         <thead>
           <tr>
             <th>
@@ -97,7 +97,7 @@
 
       <h3>Tradepile</h3>
 
-      <table class="table">
+      <table class="table" style="font-size: 1.5em;">
         <thead>
           <tr>
             <th>
@@ -121,6 +121,9 @@
             <th>
               Estado de venda
             </th>
+            <th>
+              Ações
+            </th>
           </tr>
           <tr ng-repeat="item in tradePile.auctionInfo">
             <td>
@@ -143,6 +146,44 @@
             </td>
             <td>
               {{item.expires | secondsToDateTime | date: "HH:mm:ss"}}
+            </td>
+            <td>
+              <a ng-click="removeSoldItem(item)" href="" ng-show="item.tradeState === 'closed'">Remover</a>
+            </td>
+          </tr>
+        </thead>
+      </table>
+
+      <h3>Unassigned</h3>
+
+      <table class="table" style="font-size: 1.5em;">
+        <thead>
+          <tr>
+            <th>
+              tradeId
+            </th>
+            <th>
+              Overall
+            </th>
+            <th>
+              Bought For
+            </th>
+            <th>
+              Ações
+            </th>
+          </tr>
+          <tr ng-repeat="item in purchasedItems.itemData">
+            <td>
+              {{item.id}}
+            </td>
+            <td>
+              {{item.rating}}
+            </td>
+            <td>
+              {{item.lastSalePrice}}
+            </td>
+            <td>
+              <a href="" ng-click="list(item)"> Listar</a>
             </td>
           </tr>
         </thead>
