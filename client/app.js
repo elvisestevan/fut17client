@@ -109,13 +109,13 @@ app.controller("homeController", ["$scope", "$http", "$interval", function ($sco
 
           var minimo1 = $scope.httpResponse.auctionInfo[0].buyNowPrice;
           var minimo2 = $scope.httpResponse.auctionInfo[1].buyNowPrice;
-          $scope.currentPrice = minimo2 - 100;
 
-          var venda = $scope.currentPrice * 0.95;
+          var venda = (minimo2 - 100) * 0.95;
           $scope.saldo = venda - minimo1;
           $scope.saldoPositivo = ($scope.saldo > 0);
 
           if ($scope.saldoPositivo && $scope.comprar && $scope.saldo >= 100) {
+            $scope.currentPrice = minimo2 - 100;
             $scope.buy($scope.httpResponse.auctionInfo[0]);
           }
         } else {
